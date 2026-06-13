@@ -1,0 +1,41 @@
+<form action="/survey-endpoint" method="POST">
+    
+    <div class="form-group">
+        <label for="survey-course">您參與的課程名稱</label>
+        <select id="survey-course" name="course_name" required>
+            <option value="" disabled selected>-- 請選擇課程 --</option>
+            <option value="html-basic">HTML 基礎網頁建置</option>
+            <option value="css-advanced">CSS 進階視覺美化</option>
+            <option value="javascript-expert">JavaScript 全端開發</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>1. 整體而言，您對本課程的滿意度如何？</label>
+        <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="satisfaction" value="very-satisfied" required> 非常滿意</label>
+            <label class="radio-label"><input type="radio" name="satisfaction" value="satisfied"> 滿意</label>
+            <label class="radio-label"><input type="radio" name="satisfaction" value="neutral"> 普通</label>
+            <label class="radio-label"><input type="radio" name="satisfaction" value="unsatisfied"> 不滿意</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>2. 您認為本課程哪些部分對您最有幫助？（可複選）</label>
+        <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="benefits" value="textbook"> 教材與參考連結清晰</label>
+            <label class="checkbox-label"><input type="checkbox" name="benefits" value="practice"> 課堂實作練習豐富</label>
+            <label class="checkbox-label"><input type="checkbox" name="benefits" value="instructor"> 講師講解深入淺出</label>
+            <label class="checkbox-label"><input type="checkbox" name="benefits" value="community"> 社群助教答疑及時</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="survey-feedback">3. 其他建議或想對講師說的話</label>
+        <textarea id="survey-feedback" name="feedback" rows="4" placeholder="請留下您的寶貴意見..."></textarea>
+    </div>
+
+    <button type="submit" class="btn">提交問卷</button>
+    <button type="reset" class="btn btn-secondary">重設表單</button>
+</form>
+
