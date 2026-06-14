@@ -11,10 +11,18 @@
     <header>
       <h1><a href="/">簡易網誌</a></h1>
       <nav>
-        <a href="/post/<%= post.id %>/edit" class="btn">編輯</a>
-        <form action="/post/<%= post.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('確定刪除此文章？')">
-          <button type="submit" class="btn btn-danger">刪除</button>
-        </form>
+        <% if (user) { %>
+          <span style="font-size:14px;color:#666;margin-right:5px"><%= user.username %></span>
+          <a href="/post/<%= post.id %>/edit" class="btn">編輯</a>
+          <form action="/post/<%= post.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('確定刪除此文章？')">
+            <button type="submit" class="btn btn-danger">刪除</button>
+          </form>
+          <form action="/logout" method="POST" class="inline-form">
+            <button type="submit" class="btn btn-danger">登出</button>
+          </form>
+        <% } else { %>
+          <a href="/login" class="btn">登入</a>
+        <% } %>
         <a href="/" class="btn">回首頁</a>
       </nav>
     </header>

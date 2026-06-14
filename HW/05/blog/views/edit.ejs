@@ -10,7 +10,15 @@
   <div class="container">
     <header>
       <h1><a href="/">簡易網誌</a></h1>
-      <a href="/post/<%= post.id %>" class="btn">取消</a>
+      <div style="display:flex;align-items:center;gap:10px">
+        <% if (user) { %>
+          <span style="font-size:14px;color:#666"><%= user.username %></span>
+          <form action="/logout" method="POST" class="inline-form">
+            <button type="submit" class="btn btn-danger">登出</button>
+          </form>
+        <% } %>
+        <a href="/post/<%= post.id %>" class="btn">取消</a>
+      </div>
     </header>
 
     <main>

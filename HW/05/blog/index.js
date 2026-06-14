@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const http = require('http');
-const { createDb, saveDb } = require('./database');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
+const { createDb, saveDb, findUserByUsername, findUserById, createUser } = require('./database');
 
 const logFile = path.join(__dirname, 'server.log');
 function log(msg) {
@@ -13,9 +14,6 @@ function log(msg) {
 
 log('=== Blog server starting ===');
 log(`__dirname: ${__dirname}`);
-log(`process.cwd(): ${process.cwd()}`);
-log(`Node version: ${process.version}`);
-log(`Platform: ${process.platform}`);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,29 +22,86 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'blog-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+}));
 
 let db;
 
 app.use((req, res, next) => {
   req.db = db;
+  res.locals.user = req.session.user || null;
   next();
 });
+
+function requireAuth(req, res, next) {
+  if (!req.session.user) return res.redirect('/login');
+  next();
+}
 
 app.get('/', (req, res) => {
   const stmt = db.prepare('SELECT id, title, created_at FROM posts ORDER BY created_at DESC');
   const posts = [];
-  while (stmt.step()) {
-    posts.push(stmt.getAsObject());
-  }
+  while (stmt.step()) posts.push(stmt.getAsObject());
   stmt.free();
   res.render('index', { posts });
 });
 
-app.get('/post/new', (req, res) => {
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.post('/register', async (req, res) => {
+  const { username, password, confirm } = req.body;
+  if (!username || !password || !confirm) {
+    return res.status(400).send('All fields are required.');
+  }
+  if (password !== confirm) {
+    return res.status(400).send('Passwords do not match.');
+  }
+  if (password.length < 4) {
+    return res.status(400).send('Password must be at least 4 characters.');
+  }
+  if (findUserByUsername(db, username)) {
+    return res.status(400).send('Username already exists.');
+  }
+  const hashed = await bcrypt.hash(password, 10);
+  createUser(db, username, hashed);
+  res.redirect('/login');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required.');
+  }
+  const user = findUserByUsername(db, username);
+  if (!user) {
+    return res.status(400).send('Invalid username or password.');
+  }
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    return res.status(400).send('Invalid username or password.');
+  }
+  req.session.user = { id: user.id, username: user.username };
+  res.redirect('/');
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(() => res.redirect('/'));
+});
+
+app.get('/post/new', requireAuth, (req, res) => {
   res.render('new');
 });
 
-app.post('/post', (req, res) => {
+app.post('/post', requireAuth, (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) {
     return res.status(400).send('Title and content are required.');
@@ -73,7 +128,7 @@ app.get('/post/:id', (req, res) => {
   }
 });
 
-app.get('/post/:id/edit', (req, res) => {
+app.get('/post/:id/edit', requireAuth, (req, res) => {
   const stmt = db.prepare('SELECT * FROM posts WHERE id = ?');
   stmt.bind([req.params.id]);
   if (stmt.step()) {
@@ -86,7 +141,7 @@ app.get('/post/:id/edit', (req, res) => {
   }
 });
 
-app.post('/post/:id', (req, res) => {
+app.post('/post/:id', requireAuth, (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) {
     return res.status(400).send('Title and content are required.');
@@ -96,7 +151,7 @@ app.post('/post/:id', (req, res) => {
   res.redirect(`/post/${req.params.id}`);
 });
 
-app.post('/post/:id/delete', (req, res) => {
+app.post('/post/:id/delete', requireAuth, (req, res) => {
   db.run('DELETE FROM posts WHERE id = ?', [req.params.id]);
   saveDb(db);
   res.redirect('/');
@@ -109,16 +164,14 @@ async function start() {
     log('Database ready');
 
     const server = app.listen(PORT, () => {
-      const addr = server.address();
       log(`Blog server running at http://localhost:${PORT}`);
-      log(`Address: ${JSON.stringify(addr)}`);
       log(`Working directory: ${__dirname}`);
       log('=== Server started successfully ===');
     });
 
     server.on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
-        log(`ERROR: Port ${PORT} is already in use. Close other applications or change port.`);
+        log(`ERROR: Port ${PORT} is already in use.`);
       } else {
         log(`ERROR: ${err.message}`);
       }
