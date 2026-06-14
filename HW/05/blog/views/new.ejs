@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新文章 - 簡易網誌</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/">簡易網誌</a></h1>
+      <a href="/" class="btn">回首頁</a>
+    </header>
+
+    <main>
+      <h2>寫新文章</h2>
+      <form action="/post" method="POST" class="post-form">
+        <div>
+          <label for="title">標題</label>
+          <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+          <label for="content">內容</label>
+          <textarea id="content" name="content" rows="12" required></textarea>
+        </div>
+        <button type="submit" class="btn">發布文章</button>
+      </form>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>簡易網誌</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/">簡易網誌</a></h1>
+      <a href="/post/new" class="btn">寫新文章</a>
+    </header>
+
+    <main>
+      <% if (posts.length === 0) { %>
+        <p class="empty">目前沒有文章，<a href="/post/new">寫第一篇吧！</a></p>
+      <% } else { %>
+        <ul class="post-list">
+          <% posts.forEach(post => { %>
+            <li>
+              <a href="/post/<%= post.id %>" class="post-title"><%= post.title %></a>
+              <span class="post-date"><%= new Date(post.created_at).toLocaleString('zh-TW') %></span>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </main>
+  </div>
+</body>
+</html>
