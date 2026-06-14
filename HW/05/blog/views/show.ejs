@@ -3,41 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= post.title %> - 簡易網誌</title>
+  <title><%= post.title %> - Threads Blog</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1><a href="/">簡易網誌</a></h1>
-      <nav>
+      <h1><a href="/">Threads Blog</a></h1>
+      <div class="header-right">
         <% if (user) { %>
-          <span style="font-size:14px;color:#666;margin-right:5px"><%= user.username %></span>
-          <a href="/post/<%= post.id %>/edit" class="btn">編輯</a>
-          <form action="/post/<%= post.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('確定刪除此文章？')">
-            <button type="submit" class="btn btn-danger">刪除</button>
-          </form>
+          <span class="header-user"><%= user.username %></span>
           <form action="/logout" method="POST" class="inline-form">
-            <button type="submit" class="btn btn-danger">登出</button>
+            <button type="submit" class="btn btn-sm btn-danger">登出</button>
           </form>
         <% } else { %>
-          <a href="/login" class="btn">登入</a>
+          <a href="/login" class="btn btn-sm btn-outline">登入</a>
         <% } %>
-        <a href="/" class="btn">回首頁</a>
-      </nav>
+      </div>
     </header>
 
     <main>
       <article>
         <h2><%= post.title %></h2>
         <p class="meta">
-          建立於 <%= new Date(post.created_at).toLocaleString('zh-TW') %>
+          <%= new Date(post.created_at).toLocaleString('zh-TW', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
           <% if (post.created_at !== post.updated_at) { %>
-            | 更新於 <%= new Date(post.updated_at).toLocaleString('zh-TW') %>
+            · 已編輯
           <% } %>
         </p>
         <div class="content"><%= post.content %></div>
       </article>
+
+      <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #f0f0f0;" class="action-bar">
+        <% if (user) { %>
+          <a href="/post/<%= post.id %>/edit" class="btn btn-sm btn-outline">編輯</a>
+          <form action="/post/<%= post.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('確定刪除此文章？')">
+            <button type="submit" class="btn btn-sm btn-danger">刪除</button>
+          </form>
+        <% } %>
+        <a href="/" class="btn btn-sm btn-outline">← 返回</a>
+      </div>
     </main>
   </div>
 </body>

@@ -3,34 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>註冊 - 簡易網誌</title>
+  <title>註冊 - Threads Blog</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1><a href="/">簡易網誌</a></h1>
-      <a href="/login" class="btn">登入</a>
+      <h1><a href="/">Threads Blog</a></h1>
+      <div class="header-right">
+        <a href="/login" class="btn btn-sm btn-outline">登入</a>
+      </div>
     </header>
 
     <main>
-      <h2>註冊新帳號</h2>
+      <h2 class="page-title">註冊</h2>
       <form action="/register" method="POST" class="post-form">
         <div>
           <label for="username">使用者名稱</label>
-          <input type="text" id="username" name="username" required>
+          <input type="text" id="username" name="username" placeholder="你的使用者名稱" required>
         </div>
         <div>
           <label for="password">密碼</label>
-          <input type="password" id="password" name="password" required>
+          <input type="password" id="password" name="password" placeholder="至少 4 個字元" required>
         </div>
         <div>
           <label for="confirm">確認密碼</label>
-          <input type="password" id="confirm" name="confirm" required>
+          <input type="password" id="confirm" name="confirm" placeholder="再次輸入密碼" required>
         </div>
         <button type="submit" class="btn">註冊</button>
       </form>
-      <p style="margin-top:15px">已經有帳號？<a href="/login">登入</a></p>
+      <p class="auth-link">已經有帳號？<a href="/login">登入</a></p>
     </main>
   </div>
 </body>

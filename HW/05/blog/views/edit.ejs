@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>編輯 - <%= post.title %> - 簡易網誌</title>
+  <title>編輯 - Threads Blog</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1><a href="/">簡易網誌</a></h1>
-      <div style="display:flex;align-items:center;gap:10px">
+      <h1><a href="/">Threads Blog</a></h1>
+      <div class="header-right">
         <% if (user) { %>
-          <span style="font-size:14px;color:#666"><%= user.username %></span>
+          <span class="header-user"><%= user.username %></span>
           <form action="/logout" method="POST" class="inline-form">
-            <button type="submit" class="btn btn-danger">登出</button>
+            <button type="submit" class="btn btn-sm btn-danger">登出</button>
           </form>
         <% } %>
-        <a href="/post/<%= post.id %>" class="btn">取消</a>
+        <a href="/post/<%= post.id %>" class="btn btn-sm btn-outline">取消</a>
       </div>
     </header>
 
     <main>
-      <h2>編輯文章</h2>
+      <h2 class="page-title">編輯文章</h2>
       <form action="/post/<%= post.id %>" method="POST" class="post-form">
         <div>
           <label for="title">標題</label>
