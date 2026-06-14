@@ -71,9 +71,9 @@ export default function Home() {
           {regMessage && <p className="text-xs font-mono text-yellow-300 mt-2">{regMessage}</p>}
         </div>
 
-        <button 
+       <button 
           onClick={() => router.push('/login')}
-          className="mt-6 w-full py-3 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 transition"
+          className="mt-6 w-full py-3 bg-white text-slate-900 font-extrabold rounded-xl hover:bg-slate-100 transition shadow-lg block text-center"
         >
           前往登入頁面 ➡️
         </button>
