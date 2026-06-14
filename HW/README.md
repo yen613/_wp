@@ -1,3 +1,4 @@
+以下內容使用opencode製成
 # 金門大學 資訊工程學系 — 課程作業總覽
 
 > 學生：李芷妍 (Yen Lee)
@@ -147,3 +148,16 @@ cd HW/08期中/school-system/frontend-client
 npm install
 npm run dev
 ```
+
+---
+
+## AI 輔助學習紀錄
+
+本課程作業在學習過程中使用了 AI 工具作為輔助，以下為各作業的 AI 對話紀錄連結：
+
+| 作業 | AI 工具 | 連結 |
+|------|---------|------|
+| HW4 — JavaScript 基礎語法練習 | Google Gemini | [AI 問答紀錄](https://gemini.google.com/share/ff17bbe0d0ab) |
+| HW8 期中 — 校務資訊系統 | Google Gemini | [AI 對話過程](https://gemini.google.com/share/ca780f490358) |
+
+AI 主要用於：釐清語法觀念、除錯協助、程式碼重構建議、以及全端架構設計討論。
